@@ -7,17 +7,20 @@ export const registeredUsers = [
     email: "ferdi@gmail.com",
     password: "password123",
     name: "Ferdi",
+    role: "customer",
   },
   {
     id: 2,
     email: "admin@itshop.id",
     password: "admin123",
     name: "admin",
+    role: "admin",
   },
   {
     id: 3,
     email: "test@gmail.com",
     password: "test123",
     name: "test",
+    role: "customer",
   },
 ];

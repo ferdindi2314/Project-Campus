@@ -30,6 +30,7 @@ export const AuthProvider = ({ children }) => {
         id: foundUser.id,
         email: foundUser.email,
         name: foundUser.name,
+        role: foundUser.role || "customer",
       };
       setUser(userData);
       // Simpan ke localStorage

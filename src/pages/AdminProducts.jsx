@@ -1,0 +1,328 @@
+import { useState } from "react";
+import { products } from "../data/products";
+
+export function AdminProducts() {
+  const [productList, setProductList] = useState(products);
+  const [editingId, setEditingId] = useState(null);
+  const [editData, setEditData] = useState(null);
+  const [showForm, setShowForm] = useState(false);
+  const [newProduct, setNewProduct] = useState({
+    name: "",
+    price: "",
+    category: "",
+    stock: "",
+    image: "",
+  });
+
+  const handleEdit = (product) => {
+    setEditingId(product.id);
+    setEditData({ ...product });
+  };
+
+  const handleSaveEdit = () => {
+    setProductList(
+      productList.map((p) => (p.id === editingId ? editData : p))
+    );
+    setEditingId(null);
+    setEditData(null);
+  };
+
+  const handleDelete = (id) => {
+    if (confirm("Yakin hapus produk ini?")) {
+      setProductList(productList.filter((p) => p.id !== id));
+    }
+  };
+
+  const handleAddProduct = () => {
+    if (
+      newProduct.name &&
+      newProduct.price &&
+      newProduct.category &&
+      newProduct.stock
+    ) {
+      const product = {
+        id: Math.max(...productList.map((p) => p.id), 0) + 1,
+        ...newProduct,
+        price: parseInt(newProduct.price),
+        stock: parseInt(newProduct.stock),
+      };
+      setProductList([...productList, product]);
+      setNewProduct({
+        name: "",
+        price: "",
+        category: "",
+        stock: "",
+        image: "",
+      });
+      setShowForm(false);
+    }
+  };
+
+  return (
+    <div>
+      <div className="admin-header">
+        <h1>📦 Manajemen Produk</h1>
+        <button
+          className="btn-primary"
+          onClick={() => setShowForm(!showForm)}
+        >
+          {showForm ? "❌ Batal" : "➕ Tambah Produk"}
+        </button>
+      </div>
+
+      {showForm && (
+        <div
+          style={{
+            background: "#f8f9fa",
+            padding: "1.5rem",
+            borderRadius: "8px",
+            marginBottom: "2rem",
+          }}
+        >
+          <h3>Tambah Produk Baru</h3>
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(2, 1fr)",
+              gap: "1rem",
+            }}
+          >
+            <input
+              type="text"
+              placeholder="Nama Produk"
+              value={newProduct.name}
+              onChange={(e) =>
+                setNewProduct({ ...newProduct, name: e.target.value })
+              }
+              style={{
+                padding: "0.75rem",
+                border: "1px solid #ddd",
+                borderRadius: "5px",
+              }}
+            />
+            <input
+              type="number"
+              placeholder="Harga"
+              value={newProduct.price}
+              onChange={(e) =>
+                setNewProduct({ ...newProduct, price: e.target.value })
+              }
+              style={{
+                padding: "0.75rem",
+                border: "1px solid #ddd",
+                borderRadius: "5px",
+              }}
+            />
+            <input
+              type="text"
+              placeholder="Kategori"
+              value={newProduct.category}
+              onChange={(e) =>
+                setNewProduct({ ...newProduct, category: e.target.value })
+              }
+              style={{
+                padding: "0.75rem",
+                border: "1px solid #ddd",
+                borderRadius: "5px",
+              }}
+            />
+            <input
+              type="number"
+              placeholder="Stock"
+              value={newProduct.stock}
+              onChange={(e) =>
+                setNewProduct({ ...newProduct, stock: e.target.value })
+              }
+              style={{
+                padding: "0.75rem",
+                border: "1px solid #ddd",
+                borderRadius: "5px",
+              }}
+            />
+            <input
+              type="text"
+              placeholder="URL Gambar"
+              value={newProduct.image}
+              onChange={(e) =>
+                setNewProduct({ ...newProduct, image: e.target.value })
+              }
+              style={{
+                padding: "0.75rem",
+                border: "1px solid #ddd",
+                borderRadius: "5px",
+                gridColumn: "1 / -1",
+              }}
+            />
+            <button
+              onClick={handleAddProduct}
+              style={{
+                gridColumn: "1 / -1",
+                padding: "0.75rem",
+                background: "#28a745",
+                color: "white",
+                border: "none",
+                borderRadius: "5px",
+                cursor: "pointer",
+                fontWeight: "600",
+              }}
+            >
+              ✅ Tambah Produk
+            </button>
+          </div>
+        </div>
+      )}
+
+      <div className="table-container">
+        <h2>Daftar Produk</h2>
+        {productList.length > 0 ? (
+          <table className="admin-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Nama</th>
+                <th>Harga</th>
+                <th>Kategori</th>
+                <th>Stock</th>
+                <th>Aksi</th>
+              </tr>
+            </thead>
+            <tbody>
+              {productList.map((product) => (
+                <tr key={product.id}>
+                  <td>{product.id}</td>
+                  {editingId === product.id ? (
+                    <>
+                      <td>
+                        <input
+                          type="text"
+                          value={editData.name}
+                          onChange={(e) =>
+                            setEditData({
+                              ...editData,
+                              name: e.target.value,
+                            })
+                          }
+                          style={{
+                            width: "100%",
+                            padding: "0.5rem",
+                            border: "1px solid #ddd",
+                            borderRadius: "4px",
+                          }}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          type="number"
+                          value={editData.price}
+                          onChange={(e) =>
+                            setEditData({
+                              ...editData,
+                              price: e.target.value,
+                            })
+                          }
+                          style={{
+                            width: "100%",
+                            padding: "0.5rem",
+                            border: "1px solid #ddd",
+                            borderRadius: "4px",
+                          }}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          type="text"
+                          value={editData.category}
+                          onChange={(e) =>
+                            setEditData({
+                              ...editData,
+                              category: e.target.value,
+                            })
+                          }
+                          style={{
+                            width: "100%",
+                            padding: "0.5rem",
+                            border: "1px solid #ddd",
+                            borderRadius: "4px",
+                          }}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          type="number"
+                          value={editData.stock}
+                          onChange={(e) =>
+                            setEditData({
+                              ...editData,
+                              stock: e.target.value,
+                            })
+                          }
+                          style={{
+                            width: "100%",
+                            padding: "0.5rem",
+                            border: "1px solid #ddd",
+                            borderRadius: "4px",
+                          }}
+                        />
+                      </td>
+                      <td>
+                        <button
+                          onClick={handleSaveEdit}
+                          className="btn-small"
+                          style={{
+                            background: "#28a745",
+                            color: "white",
+                          }}
+                        >
+                          ✅ Simpan
+                        </button>
+                        <button
+                          onClick={() => setEditingId(null)}
+                          className="btn-small"
+                          style={{
+                            background: "#6c757d",
+                            color: "white",
+                            marginLeft: "0.25rem",
+                          }}
+                        >
+                          ❌ Batal
+                        </button>
+                      </td>
+                    </>
+                  ) : (
+                    <>
+                      <td>{product.name}</td>
+                      <td>Rp {product.price.toLocaleString("id-ID")}</td>
+                      <td>{product.category}</td>
+                      <td>{product.stock}</td>
+                      <td>
+                        <div className="action-buttons">
+                          <button
+                            onClick={() => handleEdit(product)}
+                            className="btn-edit"
+                          >
+                            ✏️ Edit
+                          </button>
+                          <button
+                            onClick={() => handleDelete(product.id)}
+                            className="btn-delete"
+                          >
+                            🗑️ Hapus
+                          </button>
+                        </div>
+                      </td>
+                    </>
+                  )}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        ) : (
+          <div className="empty-state">
+            <div style={{ fontSize: "2rem" }}>📭</div>
+            <p>Tidak ada produk</p>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}

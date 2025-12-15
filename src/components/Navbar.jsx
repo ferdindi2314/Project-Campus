@@ -59,6 +59,13 @@ export const Navbar = () => {
               Produk
             </Link>
           </li>
+          {user && user.role === "admin" && (
+            <li>
+              <Link to="/admin" className="nav-link" onClick={handleClose}>
+                📊 Admin
+              </Link>
+            </li>
+          )}
           <li>
             <Link
               to="/cart"
