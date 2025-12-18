@@ -85,12 +85,12 @@ export function UserOrders() {
                 }}
               >
                 <div
-                        style={{
-                          display: "grid",
-                          gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))",
-                          gap: "1rem",
-                          marginBottom: "1rem",
-                        }}
+                  style={{
+                    display: "grid",
+                    gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))",
+                    gap: "1rem",
+                    marginBottom: "1rem",
+                  }}
                 >
                   <div>
                     <p style={{ color: "#999", fontSize: "0.9rem", margin: 0 }}>

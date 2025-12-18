@@ -44,12 +44,24 @@ export const Checkout = () => {
             <div className="success-grid">
               <div>
                 <h3>Data Pengiriman</h3>
-                <p><strong>Nama:</strong> {successData.fullName}</p>
-                <p><strong>Email:</strong> {successData.email}</p>
-                <p><strong>Telepon:</strong> {successData.phone}</p>
-                <p><strong>Alamat:</strong> {successData.address}</p>
-                <p><strong>Kota:</strong> {successData.city}</p>
-                <p><strong>Kode Pos:</strong> {successData.zipCode}</p>
+                <p>
+                  <strong>Nama:</strong> {successData.fullName}
+                </p>
+                <p>
+                  <strong>Email:</strong> {successData.email}
+                </p>
+                <p>
+                  <strong>Telepon:</strong> {successData.phone}
+                </p>
+                <p>
+                  <strong>Alamat:</strong> {successData.address}
+                </p>
+                <p>
+                  <strong>Kota:</strong> {successData.city}
+                </p>
+                <p>
+                  <strong>Kode Pos:</strong> {successData.zipCode}
+                </p>
               </div>
               <div>
                 <h3>Pembayaran</h3>
@@ -58,11 +70,16 @@ export const Checkout = () => {
                   {successData.paymentMethod === "credit-card"
                     ? " Kartu Kredit"
                     : successData.paymentMethod === "bank-transfer"
-                      ? " Transfer Bank"
-                      : " E-Wallet"}
+                    ? " Transfer Bank"
+                    : " E-Wallet"}
                 </p>
-                <p><strong>Total Harga:</strong> Rp {successData.total.toLocaleString("id-ID")}</p>
-                <p><strong>Jumlah Item:</strong> {successData.itemCount}</p>
+                <p>
+                  <strong>Total Harga:</strong> Rp{" "}
+                  {successData.total.toLocaleString("id-ID")}
+                </p>
+                <p>
+                  <strong>Jumlah Item:</strong> {successData.itemCount}
+                </p>
               </div>
             </div>
 
@@ -72,18 +89,31 @@ export const Checkout = () => {
                 <div key={item.product.id} className="success-item-row">
                   <div>
                     <p className="success-item-name">{item.product.name}</p>
-                    <p className="success-item-meta">{item.product.category} x{item.quantity}</p>
+                    <p className="success-item-meta">
+                      {item.product.category} x{item.quantity}
+                    </p>
                   </div>
-                  <p className="success-item-price">Rp {(item.product.price * item.quantity).toLocaleString("id-ID")}</p>
+                  <p className="success-item-price">
+                    Rp{" "}
+                    {(item.product.price * item.quantity).toLocaleString(
+                      "id-ID"
+                    )}
+                  </p>
                 </div>
               ))}
             </div>
 
             <div className="success-actions">
-              <button className="success-primary" onClick={() => navigate("/orders")}>
+              <button
+                className="success-primary"
+                onClick={() => navigate("/orders")}
+              >
                 Lihat Pesanan Saya
               </button>
-              <button className="success-secondary" onClick={() => navigate("/")}>
+              <button
+                className="success-secondary"
+                onClick={() => navigate("/")}
+              >
                 Kembali ke Beranda
               </button>
             </div>
@@ -100,7 +130,10 @@ export const Checkout = () => {
         <div className="container">
           <div className="empty-cart">
             <p>Keranjang Anda kosong</p>
-            <button onClick={() => navigate("/products")} className="continue-btn">
+            <button
+              onClick={() => navigate("/products")}
+              className="continue-btn"
+            >
               Kembali ke Produk
             </button>
           </div>
@@ -233,7 +266,9 @@ export const Checkout = () => {
                     className={`form-input ${errors.fullName ? "error" : ""}`}
                     placeholder="Masukkan nama lengkap"
                   />
-                  {errors.fullName && <span className="error-message">{errors.fullName}</span>}
+                  {errors.fullName && (
+                    <span className="error-message">{errors.fullName}</span>
+                  )}
                 </div>
 
                 <div className="form-group">
@@ -246,7 +281,9 @@ export const Checkout = () => {
                     className={`form-input ${errors.email ? "error" : ""}`}
                     placeholder="Masukkan email"
                   />
-                  {errors.email && <span className="error-message">{errors.email}</span>}
+                  {errors.email && (
+                    <span className="error-message">{errors.email}</span>
+                  )}
                 </div>
 
                 <div className="form-group">
@@ -259,7 +296,9 @@ export const Checkout = () => {
                     className={`form-input ${errors.phone ? "error" : ""}`}
                     placeholder="Masukkan nomor telepon"
                   />
-                  {errors.phone && <span className="error-message">{errors.phone}</span>}
+                  {errors.phone && (
+                    <span className="error-message">{errors.phone}</span>
+                  )}
                 </div>
 
                 <div className="form-group">
@@ -272,7 +311,9 @@ export const Checkout = () => {
                     placeholder="Masukkan alamat lengkap"
                     rows={4}
                   />
-                  {errors.address && <span className="error-message">{errors.address}</span>}
+                  {errors.address && (
+                    <span className="error-message">{errors.address}</span>
+                  )}
                 </div>
 
                 <div className="form-row">
@@ -286,7 +327,9 @@ export const Checkout = () => {
                       className={`form-input ${errors.city ? "error" : ""}`}
                       placeholder="Masukkan kota"
                     />
-                    {errors.city && <span className="error-message">{errors.city}</span>}
+                    {errors.city && (
+                      <span className="error-message">{errors.city}</span>
+                    )}
                   </div>
 
                   <div className="form-group">
@@ -299,7 +342,9 @@ export const Checkout = () => {
                       className={`form-input ${errors.zipCode ? "error" : ""}`}
                       placeholder="00000"
                     />
-                    {errors.zipCode && <span className="error-message">{errors.zipCode}</span>}
+                    {errors.zipCode && (
+                      <span className="error-message">{errors.zipCode}</span>
+                    )}
                   </div>
                 </div>
               </fieldset>
@@ -343,7 +388,11 @@ export const Checkout = () => {
                 </div>
               </fieldset>
 
-              <button type="submit" disabled={isSubmitting} className="submit-btn">
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="submit-btn"
+              >
                 {isSubmitting ? "Memproses..." : "Selesaikan Pesanan"}
               </button>
             </form>
@@ -359,11 +408,15 @@ export const Checkout = () => {
                   <div className="item-details">
                     <h4>{item.product.name}</h4>
                     <p>
-                      {item.quantity}x Rp {item.product.price.toLocaleString("id-ID")}
+                      {item.quantity}x Rp{" "}
+                      {item.product.price.toLocaleString("id-ID")}
                     </p>
                   </div>
                   <div className="item-total">
-                    Rp {(item.product.price * item.quantity).toLocaleString("id-ID")}
+                    Rp{" "}
+                    {(item.product.price * item.quantity).toLocaleString(
+                      "id-ID"
+                    )}
                   </div>
                 </div>
               ))}

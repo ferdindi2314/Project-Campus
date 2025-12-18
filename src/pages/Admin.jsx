@@ -11,6 +11,7 @@ export function Admin() {
   const { user } = useAuth();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("sales");
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   useEffect(() => {
     if (!user || user.role !== "admin") {
@@ -22,8 +23,25 @@ export function Admin() {
 
   return (
     <div className="admin-container">
+      <div className="admin-mobile-bar">
+        <h2>📊 Admin Panel</h2>
+        <button
+          className="admin-mobile-toggle"
+          onClick={() => setIsSidebarOpen((prev) => !prev)}
+        >
+          {isSidebarOpen ? "Tutup" : "Menu"}
+        </button>
+      </div>
+
+      {isSidebarOpen && (
+        <div
+          className="admin-backdrop"
+          onClick={() => setIsSidebarOpen(false)}
+        />
+      )}
+
       <div className="admin-wrapper">
-        <aside className="admin-sidebar">
+        <aside className={`admin-sidebar ${isSidebarOpen ? "open" : ""}`}>
           <h2>📊 Admin Panel</h2>
           <ul className="admin-menu">
             <li>
@@ -31,7 +49,10 @@ export function Admin() {
                 className={`admin-menu-link ${
                   activeTab === "sales" ? "active" : ""
                 }`}
-                onClick={() => setActiveTab("sales")}
+                onClick={() => {
+                  setActiveTab("sales");
+                  setIsSidebarOpen(false);
+                }}
               >
                 📈 Penjualan
               </button>
@@ -41,7 +62,10 @@ export function Admin() {
                 className={`admin-menu-link ${
                   activeTab === "users" ? "active" : ""
                 }`}
-                onClick={() => setActiveTab("users")}
+                onClick={() => {
+                  setActiveTab("users");
+                  setIsSidebarOpen(false);
+                }}
               >
                 👥 Users
               </button>
@@ -51,7 +75,10 @@ export function Admin() {
                 className={`admin-menu-link ${
                   activeTab === "products" ? "active" : ""
                 }`}
-                onClick={() => setActiveTab("products")}
+                onClick={() => {
+                  setActiveTab("products");
+                  setIsSidebarOpen(false);
+                }}
               >
                 📦 Produk
               </button>
@@ -61,7 +88,10 @@ export function Admin() {
                 className={`admin-menu-link ${
                   activeTab === "reports" ? "active" : ""
                 }`}
-                onClick={() => setActiveTab("reports")}
+                onClick={() => {
+                  setActiveTab("reports");
+                  setIsSidebarOpen(false);
+                }}
               >
                 📋 Laporan
               </button>
