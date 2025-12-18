@@ -172,14 +172,7 @@ export function AdminUsers() {
         }}
       >
         <h3>Tambah User</h3>
-        <form
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))",
-            gap: "1rem",
-          }}
-          onSubmit={handleAdd}
-        >
+        <form className="admin-form-grid-full" onSubmit={handleAdd}>
           <input
             type="text"
             placeholder="Nama"

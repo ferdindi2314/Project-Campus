@@ -76,13 +76,7 @@ export function AdminProducts() {
           }}
         >
           <h3>Tambah Produk Baru</h3>
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(2, 1fr)",
-              gap: "1rem",
-            }}
-          >
+          <div className="admin-form-grid">
             <input
               type="text"
               placeholder="Nama Produk"

@@ -171,6 +171,19 @@
 
 .table-container {
   overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.admin-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+.admin-form-grid-full {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
 }
 
 .admin-table {
@@ -348,5 +361,17 @@
   .admin-table th,
   .admin-table td {
     padding: 0.75rem;
+    white-space: nowrap;
+  }
+
+  .table-container {
+    overflow-x: auto;
+    margin: 0 -1.5rem;
+    padding: 0 1.5rem;
+  }
+
+  .admin-form-grid,
+  .admin-form-grid-full {
+    grid-template-columns: 1fr;
   }
 }
