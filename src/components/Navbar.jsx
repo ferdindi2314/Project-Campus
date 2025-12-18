@@ -2,7 +2,7 @@ import "./Navbar.css";
 import { Link, useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import { useAuth } from "../context/AuthContext";
-import { CustomConfirm } from "./CustomAlert";
+import { CustomAlert, CustomConfirm } from "./CustomAlert";
 import { useState, useRef, useEffect } from "react";
 
 export const Navbar = () => {
@@ -12,6 +12,7 @@ export const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isAccountOpen, setIsAccountOpen] = useState(false);
   const [isLogoutConfirmOpen, setIsLogoutConfirmOpen] = useState(false);
+  const [isLogoutSuccessOpen, setIsLogoutSuccessOpen] = useState(false);
   const accountMenuRef = useRef(null);
   const cartCount = items.length;
 
@@ -58,13 +59,6 @@ export const Navbar = () => {
               Produk
             </Link>
           </li>
-          {user && user.role === "admin" && (
-            <li>
-              <Link to="/admin" className="nav-link" onClick={handleClose}>
-                📊 Admin
-              </Link>
-            </li>
-          )}
           <li>
             <Link
               to="/cart"
@@ -164,10 +158,18 @@ export const Navbar = () => {
         onConfirm={() => {
           logout();
           setIsLogoutConfirmOpen(false);
+          setIsLogoutSuccessOpen(true);
         }}
         onCancel={() => setIsLogoutConfirmOpen(false)}
         title="Konfirmasi Keluar"
         message="Apakah Anda yakin ingin keluar dari akun?"
+      />
+      <CustomAlert
+        isOpen={isLogoutSuccessOpen}
+        onClose={() => setIsLogoutSuccessOpen(false)}
+        type="success"
+        title="Berhasil Logout"
+        message="Anda telah keluar dari akun."
       />
     </nav>
   );
