@@ -5,10 +5,28 @@ const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [users, setUsers] = useState([]);
 
-  // Load user dari localStorage saat pertama kali mount
+  // Load user dan data pengguna dari localStorage
   useEffect(() => {
     const savedUser = localStorage.getItem("user");
+    const savedUsers = localStorage.getItem("users");
+
+    if (savedUsers) {
+      try {
+        setUsers(JSON.parse(savedUsers));
+      } catch (error) {
+        console.error("Error loading users from localStorage:", error);
+        localStorage.removeItem("users");
+        setUsers(registeredUsers);
+        localStorage.setItem("users", JSON.stringify(registeredUsers));
+      }
+    } else {
+      // Seed initial users ke localStorage
+      setUsers(registeredUsers);
+      localStorage.setItem("users", JSON.stringify(registeredUsers));
+    }
+
     if (savedUser) {
       try {
         setUser(JSON.parse(savedUser));
@@ -19,9 +37,14 @@ export const AuthProvider = ({ children }) => {
     }
   }, []);
 
+  const persistUsers = (nextUsers) => {
+    setUsers(nextUsers);
+    localStorage.setItem("users", JSON.stringify(nextUsers));
+  };
+
   const login = (email, password) => {
-    // Cari user di data users.js
-    const foundUser = registeredUsers.find(
+    const source = users.length ? users : registeredUsers;
+    const foundUser = source.find(
       (u) => u.email === email && u.password === password
     );
 
@@ -33,11 +56,78 @@ export const AuthProvider = ({ children }) => {
         role: foundUser.role || "customer",
       };
       setUser(userData);
-      // Simpan ke localStorage
       localStorage.setItem("user", JSON.stringify(userData));
-      return true;
+      return { success: true, user: userData };
     }
-    return false;
+    return { success: false, message: "Email atau password salah" };
+  };
+
+  const loginAdmin = (email, password) => {
+    const source = users.length ? users : registeredUsers;
+    const foundUser = source.find(
+      (u) => u.email === email && u.password === password && u.role === "admin"
+    );
+
+    if (foundUser) {
+      const userData = {
+        id: foundUser.id,
+        email: foundUser.email,
+        name: foundUser.name,
+        role: foundUser.role,
+      };
+      setUser(userData);
+      localStorage.setItem("user", JSON.stringify(userData));
+      return { success: true, user: userData };
+    }
+    return { success: false, message: "Akses admin ditolak" };
+  };
+
+  const register = ({ name, email, password }, { autoLogin = true } = {}) => {
+    const exists = users.some((u) => u.email === email);
+    if (exists) {
+      return { success: false, message: "Email sudah terdaftar" };
+    }
+    const newUser = {
+      id: Date.now(),
+      name,
+      email,
+      password,
+      role: "customer",
+    };
+    const nextUsers = [...users, newUser];
+    persistUsers(nextUsers);
+    const userData = {
+      id: newUser.id,
+      email: newUser.email,
+      name: newUser.name,
+      role: newUser.role,
+    };
+    if (autoLogin) {
+      setUser(userData);
+      localStorage.setItem("user", JSON.stringify(userData));
+    }
+    return { success: true, user: userData };
+  };
+
+  const updateProfile = ({ name, password, targetId }) => {
+    const targetUserId = targetId || user?.id;
+    if (!targetUserId) return { success: false, message: "Tidak ada sesi" };
+    const nextUsers = users.map((u) =>
+      u.id === targetUserId
+        ? { ...u, name: name || u.name, password: password || u.password }
+        : u
+    );
+    persistUsers(nextUsers);
+    if (user && user.id === targetUserId) {
+      const updatedUser = {
+        ...user,
+        name: name || user.name,
+      };
+      setUser(updatedUser);
+      localStorage.setItem("user", JSON.stringify(updatedUser));
+      return { success: true, user: updatedUser };
+    }
+    return { success: true };
   };
 
   const logout = () => {
@@ -47,7 +137,9 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
+    <AuthContext.Provider
+      value={{ user, users, login, loginAdmin, register, updateProfile, logout }}
+    >
       {children}
     </AuthContext.Provider>
   );

@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./Admin.css";
 import { AdminSales } from "./AdminSales";
 import { AdminProducts } from "./AdminProducts";
 import { AdminReports } from "./AdminReports";
+import { AdminUsers } from "./AdminUsers";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 
@@ -11,11 +12,13 @@ export function Admin() {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("sales");
 
-  // Redirect if not admin
-  if (!user || user.role !== "admin") {
-    navigate("/");
-    return null;
-  }
+  useEffect(() => {
+    if (!user || user.role !== "admin") {
+      navigate("/admin/login", { replace: true });
+    }
+  }, [user, navigate]);
+
+  if (!user || user.role !== "admin") return null;
 
   return (
     <div className="admin-container">
@@ -29,6 +32,14 @@ export function Admin() {
                 onClick={() => setActiveTab("sales")}
               >
                 📈 Penjualan
+              </button>
+            </li>
+            <li>
+              <button
+                className={`admin-menu-link ${activeTab === "users" ? "active" : ""}`}
+                onClick={() => setActiveTab("users")}
+              >
+                👥 Users
               </button>
             </li>
             <li>
@@ -52,6 +63,7 @@ export function Admin() {
 
         <div className="admin-content">
           {activeTab === "sales" && <AdminSales />}
+          {activeTab === "users" && <AdminUsers />}
           {activeTab === "products" && <AdminProducts />}
           {activeTab === "reports" && <AdminReports />}
         </div>

@@ -1,17 +1,16 @@
 import "./Navbar.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import { useAuth } from "../context/AuthContext";
-import { LoginModal } from "./LoginModal";
 import { CustomConfirm } from "./CustomAlert";
 import { useState, useRef, useEffect } from "react";
 
 export const Navbar = () => {
   const { items } = useCart();
   const { user, logout } = useAuth();
+  const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isAccountOpen, setIsAccountOpen] = useState(false);
-  const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [isLogoutConfirmOpen, setIsLogoutConfirmOpen] = useState(false);
   const accountMenuRef = useRef(null);
   const cartCount = items.length;
@@ -104,6 +103,26 @@ export const Navbar = () => {
                     <p className="account-email">{user.email}</p>
                   </div>
                   <button
+                    className="dropdown-btn login-btn"
+                    onClick={() => {
+                      setIsAccountOpen(false);
+                      navigate("/profile");
+                    }}
+                  >
+                    Profil
+                  </button>
+                  {user.role === "admin" && (
+                    <button
+                      className="dropdown-btn login-btn"
+                      onClick={() => {
+                        setIsAccountOpen(false);
+                        navigate("/admin");
+                      }}
+                    >
+                      Admin Panel
+                    </button>
+                  )}
+                  <button
                     className="dropdown-btn logout-btn"
                     onClick={() => {
                       setIsLogoutConfirmOpen(true);
@@ -114,22 +133,31 @@ export const Navbar = () => {
                   </button>
                 </>
               ) : (
-                <button
-                  className="dropdown-btn login-btn"
-                  onClick={() => {
-                    setIsLoginOpen(true);
-                    setIsAccountOpen(false);
-                  }}
-                >
-                  Masuk
-                </button>
+                <>
+                  <button
+                    className="dropdown-btn login-btn"
+                    onClick={() => {
+                      setIsAccountOpen(false);
+                      navigate("/login");
+                    }}
+                  >
+                    Masuk
+                  </button>
+                  <button
+                    className="dropdown-btn"
+                    onClick={() => {
+                      setIsAccountOpen(false);
+                      navigate("/register");
+                    }}
+                  >
+                    Daftar
+                  </button>
+                </>
               )}
             </div>
           )}
         </div>
       </div>
-
-      <LoginModal isOpen={isLoginOpen} onClose={() => setIsLoginOpen(false)} />
 
       <CustomConfirm
         isOpen={isLogoutConfirmOpen}
