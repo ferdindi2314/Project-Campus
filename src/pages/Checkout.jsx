@@ -22,98 +22,34 @@ export const Checkout = () => {
   const [isSuccess, setIsSuccess] = useState(false);
   const [successData, setSuccessData] = useState(null);
 
-  // Jika checkout sudah berhasil, tampilkan success page dulu
+  // Success view
   if (isSuccess && successData) {
     return (
       <div className="checkout-page">
         <div className="container">
-          <div
-            style={{
-              background: "white",
-              borderRadius: "10px",
-              padding: "2rem",
-              boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
-            }}
-          >
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "1rem",
-                marginBottom: "2rem",
-              }}
-            >
-              <div
-                style={{
-                  width: 56,
-                  height: 56,
-                  borderRadius: "50%",
-                  background: "#28a745",
-                  color: "white",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  fontSize: 28,
-                  fontWeight: 800,
-                }}
-              >
-                ✓
-              </div>
-              <h1 style={{ margin: 0 }}>Barang Berhasil di Checkout!</h1>
+          <div className="checkout-success-card">
+            <div className="success-head">
+              <div className="success-icon-circle">✓</div>
+              <h1>Barang Berhasil di Checkout!</h1>
             </div>
-            <p style={{ color: "#666", marginBottom: "1.5rem" }}>
+            <p className="success-subtitle">
               Terima kasih atas pembelian Anda. Pesanan Anda telah kami terima.
             </p>
 
-            <div
-              style={{
-                background: "#f8f9fa",
-                padding: "1.5rem",
-                borderRadius: "8px",
-                marginBottom: "2rem",
-              }}
-            >
-              <h3 style={{ marginTop: 0 }}>Nomor Pesanan</h3>
-              <p
-                style={{
-                  fontSize: "1.3rem",
-                  fontWeight: 800,
-                  color: "#667eea",
-                  margin: 0,
-                }}
-              >
-                {successData.orderId}
-              </p>
+            <div className="success-order-box">
+              <h3>Nomor Pesanan</h3>
+              <p className="order-number-text">{successData.orderId}</p>
             </div>
 
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "1fr 1fr",
-                gap: "1.5rem",
-                marginBottom: "2rem",
-              }}
-            >
+            <div className="success-grid">
               <div>
                 <h3>Data Pengiriman</h3>
-                <p>
-                  <strong>Nama:</strong> {successData.fullName}
-                </p>
-                <p>
-                  <strong>Email:</strong> {successData.email}
-                </p>
-                <p>
-                  <strong>Telepon:</strong> {successData.phone}
-                </p>
-                <p>
-                  <strong>Alamat:</strong> {successData.address}
-                </p>
-                <p>
-                  <strong>Kota:</strong> {successData.city}
-                </p>
-                <p>
-                  <strong>Kode Pos:</strong> {successData.zipCode}
-                </p>
+                <p><strong>Nama:</strong> {successData.fullName}</p>
+                <p><strong>Email:</strong> {successData.email}</p>
+                <p><strong>Telepon:</strong> {successData.phone}</p>
+                <p><strong>Alamat:</strong> {successData.address}</p>
+                <p><strong>Kota:</strong> {successData.city}</p>
+                <p><strong>Kode Pos:</strong> {successData.zipCode}</p>
               </div>
               <div>
                 <h3>Pembayaran</h3>
@@ -122,92 +58,32 @@ export const Checkout = () => {
                   {successData.paymentMethod === "credit-card"
                     ? " Kartu Kredit"
                     : successData.paymentMethod === "bank-transfer"
-                    ? " Transfer Bank"
-                    : " E-Wallet"}
+                      ? " Transfer Bank"
+                      : " E-Wallet"}
                 </p>
-                <p>
-                  <strong>Total Harga:</strong> Rp{" "}
-                  {successData.total.toLocaleString("id-ID")}
-                </p>
-                <p>
-                  <strong>Jumlah Item:</strong> {successData.itemCount}
-                </p>
+                <p><strong>Total Harga:</strong> Rp {successData.total.toLocaleString("id-ID")}</p>
+                <p><strong>Jumlah Item:</strong> {successData.itemCount}</p>
               </div>
             </div>
 
-            <div
-              style={{
-                background: "#f8f9fa",
-                padding: "1.5rem",
-                borderRadius: "8px",
-                marginBottom: "2rem",
-              }}
-            >
-              <h3 style={{ marginTop: 0 }}>Item yang Dipesan</h3>
+            <div className="success-items">
+              <h3>Item yang Dipesan</h3>
               {successData.items.map((item) => (
-                <div
-                  key={item.product.id}
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                    paddingBottom: "0.75rem",
-                    borderBottom: "1px solid #ddd",
-                  }}
-                >
+                <div key={item.product.id} className="success-item-row">
                   <div>
-                    <p style={{ margin: "0.25rem 0", fontWeight: 600 }}>
-                      {item.product.name}
-                    </p>
-                    <p
-                      style={{
-                        margin: "0.25rem 0",
-                        color: "#666",
-                        fontSize: "0.9rem",
-                      }}
-                    >
-                      {item.product.category} x{item.quantity}
-                    </p>
+                    <p className="success-item-name">{item.product.name}</p>
+                    <p className="success-item-meta">{item.product.category} x{item.quantity}</p>
                   </div>
-                  <p style={{ margin: 0, fontWeight: 600 }}>
-                    Rp{" "}
-                    {(item.product.price * item.quantity).toLocaleString(
-                      "id-ID"
-                    )}
-                  </p>
+                  <p className="success-item-price">Rp {(item.product.price * item.quantity).toLocaleString("id-ID")}</p>
                 </div>
               ))}
             </div>
 
-            <div style={{ display: "flex", gap: "1rem", marginTop: "2rem" }}>
-              <button
-                onClick={() => navigate("/orders")}
-                style={{
-                  flex: 1,
-                  padding: "0.9rem",
-                  background: "#667eea",
-                  color: "white",
-                  border: "none",
-                  borderRadius: "8px",
-                  fontWeight: 600,
-                  cursor: "pointer",
-                }}
-              >
+            <div className="success-actions">
+              <button className="success-primary" onClick={() => navigate("/orders")}>
                 Lihat Pesanan Saya
               </button>
-              <button
-                onClick={() => navigate("/")}
-                style={{
-                  flex: 1,
-                  padding: "0.9rem",
-                  background: "#f0f0f0",
-                  color: "#333",
-                  border: "none",
-                  borderRadius: "8px",
-                  fontWeight: 600,
-                  cursor: "pointer",
-                }}
-              >
+              <button className="success-secondary" onClick={() => navigate("/")}>
                 Kembali ke Beranda
               </button>
             </div>
@@ -217,17 +93,14 @@ export const Checkout = () => {
     );
   }
 
-  // Cek apakah keranjang kosong (hanya saat belum checkout)
+  // Empty cart view (only before checkout success)
   if (items.length === 0 && !isSuccess) {
     return (
       <div className="checkout-page">
         <div className="container">
           <div className="empty-cart">
             <p>Keranjang Anda kosong</p>
-            <button
-              onClick={() => navigate("/products")}
-              className="continue-btn"
-            >
+            <button onClick={() => navigate("/products")} className="continue-btn">
               Kembali ke Produk
             </button>
           </div>
@@ -360,9 +233,7 @@ export const Checkout = () => {
                     className={`form-input ${errors.fullName ? "error" : ""}`}
                     placeholder="Masukkan nama lengkap"
                   />
-                  {errors.fullName && (
-                    <span className="error-message">{errors.fullName}</span>
-                  )}
+                  {errors.fullName && <span className="error-message">{errors.fullName}</span>}
                 </div>
 
                 <div className="form-group">
@@ -375,9 +246,7 @@ export const Checkout = () => {
                     className={`form-input ${errors.email ? "error" : ""}`}
                     placeholder="Masukkan email"
                   />
-                  {errors.email && (
-                    <span className="error-message">{errors.email}</span>
-                  )}
+                  {errors.email && <span className="error-message">{errors.email}</span>}
                 </div>
 
                 <div className="form-group">
@@ -390,9 +259,7 @@ export const Checkout = () => {
                     className={`form-input ${errors.phone ? "error" : ""}`}
                     placeholder="Masukkan nomor telepon"
                   />
-                  {errors.phone && (
-                    <span className="error-message">{errors.phone}</span>
-                  )}
+                  {errors.phone && <span className="error-message">{errors.phone}</span>}
                 </div>
 
                 <div className="form-group">
@@ -405,9 +272,7 @@ export const Checkout = () => {
                     placeholder="Masukkan alamat lengkap"
                     rows={4}
                   />
-                  {errors.address && (
-                    <span className="error-message">{errors.address}</span>
-                  )}
+                  {errors.address && <span className="error-message">{errors.address}</span>}
                 </div>
 
                 <div className="form-row">
@@ -421,9 +286,7 @@ export const Checkout = () => {
                       className={`form-input ${errors.city ? "error" : ""}`}
                       placeholder="Masukkan kota"
                     />
-                    {errors.city && (
-                      <span className="error-message">{errors.city}</span>
-                    )}
+                    {errors.city && <span className="error-message">{errors.city}</span>}
                   </div>
 
                   <div className="form-group">
@@ -436,9 +299,7 @@ export const Checkout = () => {
                       className={`form-input ${errors.zipCode ? "error" : ""}`}
                       placeholder="00000"
                     />
-                    {errors.zipCode && (
-                      <span className="error-message">{errors.zipCode}</span>
-                    )}
+                    {errors.zipCode && <span className="error-message">{errors.zipCode}</span>}
                   </div>
                 </div>
               </fieldset>
@@ -482,11 +343,7 @@ export const Checkout = () => {
                 </div>
               </fieldset>
 
-              <button
-                type="submit"
-                disabled={isSubmitting}
-                className="submit-btn"
-              >
+              <button type="submit" disabled={isSubmitting} className="submit-btn">
                 {isSubmitting ? "Memproses..." : "Selesaikan Pesanan"}
               </button>
             </form>
@@ -502,15 +359,11 @@ export const Checkout = () => {
                   <div className="item-details">
                     <h4>{item.product.name}</h4>
                     <p>
-                      {item.quantity}x Rp{" "}
-                      {item.product.price.toLocaleString("id-ID")}
+                      {item.quantity}x Rp {item.product.price.toLocaleString("id-ID")}
                     </p>
                   </div>
                   <div className="item-total">
-                    Rp{" "}
-                    {(item.product.price * item.quantity).toLocaleString(
-                      "id-ID"
-                    )}
+                    Rp {(item.product.price * item.quantity).toLocaleString("id-ID")}
                   </div>
                 </div>
               ))}

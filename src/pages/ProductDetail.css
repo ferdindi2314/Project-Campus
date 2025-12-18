@@ -373,3 +373,25 @@
     gap: 1rem;
   }
 }
+
+@media (max-width: 480px) {
+  .product-detail {
+    padding: 1.25rem;
+  }
+
+  .product-detail-container {
+    padding: 1.15rem;
+    gap: 1.5rem;
+  }
+
+  .price-section {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .add-to-cart-btn,
+  .checkout-btn {
+    padding: 0.9rem;
+  }
+}

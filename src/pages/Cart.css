@@ -284,3 +284,17 @@
     font-size: 1.5rem;
   }
 }
+
+@media (max-width: 600px) {
+  .cart-page {
+    padding: 1.25rem;
+  }
+
+  .cart-items {
+    overflow-x: auto;
+  }
+
+  .cart-table {
+    min-width: 520px;
+  }
+}

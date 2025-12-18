@@ -187,3 +187,22 @@
     font-size: 1.5rem;
   }
 }
+
+@media (max-width: 480px) {
+  .products-page {
+    padding: 1.25rem;
+  }
+
+  .sidebar {
+    padding: 1.25rem;
+  }
+
+  .products-grid {
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 0.9rem;
+  }
+
+  .products-main h1 {
+    font-size: 1.35rem;
+  }
+}
