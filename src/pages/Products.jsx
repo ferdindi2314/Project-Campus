@@ -1,14 +1,15 @@
 import { useState, useMemo } from "react";
 import { Link } from "react-router-dom";
-import { products } from "../data/products";
+import { useProducts } from "../context/ProductsContext";
 import "./Products.css";
 
 export const Products = () => {
+  const { products, getCategories } = useProducts();
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
   const [sortBy, setSortBy] = useState("name");
 
-  const categories = ["", ...new Set(products.map((p) => p.category))];
+  const categories = getCategories();
 
   const filteredProducts = useMemo(() => {
     let filtered = products.filter((product) => {

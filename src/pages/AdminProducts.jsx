@@ -1,11 +1,13 @@
 import { useState } from "react";
-import { products } from "../data/products";
+import { useProducts } from "../context/ProductsContext";
 
 export function AdminProducts() {
+  const { products, addProduct, updateProduct, deleteProduct } = useProducts();
   const [productList, setProductList] = useState(products);
   const [editingId, setEditingId] = useState(null);
   const [editData, setEditData] = useState(null);
   const [showForm, setShowForm] = useState(false);
+  const categories = [...new Set(products.map((p) => p.category))];
   const [newProduct, setNewProduct] = useState({
     name: "",
     price: "",
@@ -20,16 +22,14 @@ export function AdminProducts() {
   };
 
   const handleSaveEdit = () => {
-    setProductList(
-      productList.map((p) => (p.id === editingId ? editData : p))
-    );
+    updateProduct(editingId, { ...editData, id: editingId });
     setEditingId(null);
     setEditData(null);
   };
 
   const handleDelete = (id) => {
     if (confirm("Yakin hapus produk ini?")) {
-      setProductList(productList.filter((p) => p.id !== id));
+      deleteProduct(id);
     }
   };
 
@@ -40,13 +40,12 @@ export function AdminProducts() {
       newProduct.category &&
       newProduct.stock
     ) {
-      const product = {
-        id: Math.max(...productList.map((p) => p.id), 0) + 1,
+      const payload = {
         ...newProduct,
-        price: parseInt(newProduct.price),
-        stock: parseInt(newProduct.stock),
+        price: parseInt(newProduct.price, 10),
+        stock: parseInt(newProduct.stock, 10),
       };
-      setProductList([...productList, product]);
+      addProduct(payload);
       setNewProduct({
         name: "",
         price: "",
@@ -62,10 +61,7 @@ export function AdminProducts() {
     <div>
       <div className="admin-header">
         <h1>📦 Manajemen Produk</h1>
-        <button
-          className="btn-primary"
-          onClick={() => setShowForm(!showForm)}
-        >
+        <button className="btn-primary" onClick={() => setShowForm(!showForm)}>
           {showForm ? "❌ Batal" : "➕ Tambah Produk"}
         </button>
       </div>
@@ -113,9 +109,7 @@ export function AdminProducts() {
                 borderRadius: "5px",
               }}
             />
-            <input
-              type="text"
-              placeholder="Kategori"
+            <select
               value={newProduct.category}
               onChange={(e) =>
                 setNewProduct({ ...newProduct, category: e.target.value })
@@ -124,8 +118,16 @@ export function AdminProducts() {
                 padding: "0.75rem",
                 border: "1px solid #ddd",
                 borderRadius: "5px",
+                background: "white",
               }}
-            />
+            >
+              <option value="">Pilih Kategori</option>
+              {categories.map((c) => (
+                <option key={c} value={c}>
+                  {c}
+                </option>
+              ))}
+            </select>
             <input
               type="number"
               placeholder="Stock"
@@ -174,7 +176,7 @@ export function AdminProducts() {
 
       <div className="table-container">
         <h2>Daftar Produk</h2>
-        {productList.length > 0 ? (
+        {products.length > 0 ? (
           <table className="admin-table">
             <thead>
               <tr>
@@ -187,7 +189,7 @@ export function AdminProducts() {
               </tr>
             </thead>
             <tbody>
-              {productList.map((product) => (
+              {products.map((product) => (
                 <tr key={product.id}>
                   <td>{product.id}</td>
                   {editingId === product.id ? (

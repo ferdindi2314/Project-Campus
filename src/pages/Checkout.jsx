@@ -1,11 +1,13 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext";
+import { useOrders } from "../context/OrdersContext";
 import "./Checkout.css";
 
 export const Checkout = () => {
   const navigate = useNavigate();
   const { items, getTotalPrice, clearCart } = useCart();
+  const { addOrder } = useOrders();
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
@@ -18,8 +20,205 @@ export const Checkout = () => {
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [successData, setSuccessData] = useState(null);
 
-  if (items.length === 0) {
+  // Jika checkout sudah berhasil, tampilkan success page dulu
+  if (isSuccess && successData) {
+    return (
+      <div className="checkout-page">
+        <div className="container">
+          <div
+            style={{
+              background: "white",
+              borderRadius: "10px",
+              padding: "2rem",
+              boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
+            }}
+          >
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "1rem",
+                marginBottom: "2rem",
+              }}
+            >
+              <div
+                style={{
+                  width: 56,
+                  height: 56,
+                  borderRadius: "50%",
+                  background: "#28a745",
+                  color: "white",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  fontSize: 28,
+                  fontWeight: 800,
+                }}
+              >
+                ✓
+              </div>
+              <h1 style={{ margin: 0 }}>Barang Berhasil di Checkout!</h1>
+            </div>
+            <p style={{ color: "#666", marginBottom: "1.5rem" }}>
+              Terima kasih atas pembelian Anda. Pesanan Anda telah kami terima.
+            </p>
+
+            <div
+              style={{
+                background: "#f8f9fa",
+                padding: "1.5rem",
+                borderRadius: "8px",
+                marginBottom: "2rem",
+              }}
+            >
+              <h3 style={{ marginTop: 0 }}>Nomor Pesanan</h3>
+              <p
+                style={{
+                  fontSize: "1.3rem",
+                  fontWeight: 800,
+                  color: "#667eea",
+                  margin: 0,
+                }}
+              >
+                {successData.orderId}
+              </p>
+            </div>
+
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "1fr 1fr",
+                gap: "1.5rem",
+                marginBottom: "2rem",
+              }}
+            >
+              <div>
+                <h3>Data Pengiriman</h3>
+                <p>
+                  <strong>Nama:</strong> {successData.fullName}
+                </p>
+                <p>
+                  <strong>Email:</strong> {successData.email}
+                </p>
+                <p>
+                  <strong>Telepon:</strong> {successData.phone}
+                </p>
+                <p>
+                  <strong>Alamat:</strong> {successData.address}
+                </p>
+                <p>
+                  <strong>Kota:</strong> {successData.city}
+                </p>
+                <p>
+                  <strong>Kode Pos:</strong> {successData.zipCode}
+                </p>
+              </div>
+              <div>
+                <h3>Pembayaran</h3>
+                <p>
+                  <strong>Metode:</strong>
+                  {successData.paymentMethod === "credit-card"
+                    ? " Kartu Kredit"
+                    : successData.paymentMethod === "bank-transfer"
+                    ? " Transfer Bank"
+                    : " E-Wallet"}
+                </p>
+                <p>
+                  <strong>Total Harga:</strong> Rp{" "}
+                  {successData.total.toLocaleString("id-ID")}
+                </p>
+                <p>
+                  <strong>Jumlah Item:</strong> {successData.itemCount}
+                </p>
+              </div>
+            </div>
+
+            <div
+              style={{
+                background: "#f8f9fa",
+                padding: "1.5rem",
+                borderRadius: "8px",
+                marginBottom: "2rem",
+              }}
+            >
+              <h3 style={{ marginTop: 0 }}>Item yang Dipesan</h3>
+              {successData.items.map((item) => (
+                <div
+                  key={item.product.id}
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    paddingBottom: "0.75rem",
+                    borderBottom: "1px solid #ddd",
+                  }}
+                >
+                  <div>
+                    <p style={{ margin: "0.25rem 0", fontWeight: 600 }}>
+                      {item.product.name}
+                    </p>
+                    <p
+                      style={{
+                        margin: "0.25rem 0",
+                        color: "#666",
+                        fontSize: "0.9rem",
+                      }}
+                    >
+                      {item.product.category} x{item.quantity}
+                    </p>
+                  </div>
+                  <p style={{ margin: 0, fontWeight: 600 }}>
+                    Rp{" "}
+                    {(item.product.price * item.quantity).toLocaleString(
+                      "id-ID"
+                    )}
+                  </p>
+                </div>
+              ))}
+            </div>
+
+            <div style={{ display: "flex", gap: "1rem", marginTop: "2rem" }}>
+              <button
+                onClick={() => navigate("/orders")}
+                style={{
+                  flex: 1,
+                  padding: "0.9rem",
+                  background: "#667eea",
+                  color: "white",
+                  border: "none",
+                  borderRadius: "8px",
+                  fontWeight: 600,
+                  cursor: "pointer",
+                }}
+              >
+                Lihat Pesanan Saya
+              </button>
+              <button
+                onClick={() => navigate("/")}
+                style={{
+                  flex: 1,
+                  padding: "0.9rem",
+                  background: "#f0f0f0",
+                  color: "#333",
+                  border: "none",
+                  borderRadius: "8px",
+                  fontWeight: 600,
+                  cursor: "pointer",
+                }}
+              >
+                Kembali ke Beranda
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Cek apakah keranjang kosong (hanya saat belum checkout)
+  if (items.length === 0 && !isSuccess) {
     return (
       <div className="checkout-page">
         <div className="container">
@@ -98,39 +297,47 @@ export const Checkout = () => {
     setIsSubmitting(true);
 
     setTimeout(() => {
+      const total = getTotalPrice();
+      const orderId = `ORD-${String(Date.now()).slice(-6)}`;
+      const orderPayload = {
+        customer: formData.fullName,
+        email: formData.email,
+        items: items.map((i) => ({
+          id: i.product.id,
+          name: i.product.name,
+          price: i.product.price,
+          qty: i.quantity,
+          category: i.product.category,
+        })),
+        total: total * 1.1,
+        paymentMethod: formData.paymentMethod,
+      };
+      addOrder(orderPayload);
       setIsSubmitting(false);
+      const displayItems = items.map((i) => ({
+        product: {
+          id: i.product.id,
+          name: i.product.name,
+          price: i.product.price,
+          category: i.product.category,
+        },
+        quantity: i.quantity,
+      }));
+      setSuccessData({
+        ...formData,
+        items: displayItems,
+        total: total * 1.1,
+        orderId,
+        itemCount: items.length,
+      });
       setIsSuccess(true);
       clearCart();
-
-      setTimeout(() => {
-        navigate("/");
-      }, 3000);
-    }, 2000);
+    }, 1200);
   };
 
   const total = getTotalPrice();
   const tax = total * 0.1;
   const finalTotal = total + tax;
-
-  if (isSuccess) {
-    return (
-      <div className="checkout-page">
-        <div className="container">
-          <div className="success-message">
-            <div className="success-icon">✓</div>
-            <h1>Pesanan Berhasil!</h1>
-            <p>Terima kasih atas pembelian Anda.</p>
-            <p className="order-number">
-              Nomor Pesanan: #{Math.floor(Math.random() * 1000000)}
-            </p>
-            <p className="redirect-message">
-              Anda akan dialihkan ke beranda dalam 3 detik...
-            </p>
-          </div>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="checkout-page">

@@ -136,9 +136,33 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem("user");
   };
 
+  const deleteUser = (id) => {
+    const target = users.find((u) => u.id === id);
+    if (!target) return { success: false, message: "User tidak ditemukan" };
+    if (target.role === "admin")
+      return { success: false, message: "Tidak bisa hapus admin" };
+    if (user && user.id === id)
+      return {
+        success: false,
+        message: "Tidak bisa hapus diri sendiri saat login",
+      };
+    const next = users.filter((u) => u.id !== id);
+    persistUsers(next);
+    return { success: true };
+  };
+
   return (
     <AuthContext.Provider
-      value={{ user, users, login, loginAdmin, register, updateProfile, logout }}
+      value={{
+        user,
+        users,
+        login,
+        loginAdmin,
+        register,
+        updateProfile,
+        deleteUser,
+        logout,
+      }}
     >
       {children}
     </AuthContext.Provider>

@@ -35,16 +35,49 @@ export function UserProfile() {
   return (
     <div className="auth-page">
       <div className="auth-card profile-card">
-        <h1>Profil</h1>
-        <p className="auth-subtitle">Kelola akun Anda</p>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "1rem",
+            marginBottom: "1rem",
+          }}
+        >
+          <div
+            style={{
+              width: 56,
+              height: 56,
+              borderRadius: "50%",
+              background: "#667eea",
+              color: "white",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              fontWeight: 800,
+              fontSize: 20,
+            }}
+          >
+            {user.name?.[0]?.toUpperCase()}
+          </div>
+          <div>
+            <h1 style={{ margin: 0 }}>Profil</h1>
+            <p className="auth-subtitle" style={{ margin: 0 }}>
+              Kelola akun Anda
+            </p>
+          </div>
+        </div>
         {message && (
           <div className={`auth-alert ${success ? "auth-success" : ""}`}>
             {message}
           </div>
         )}
         <div className="profile-info">
-          <p><strong>Email:</strong> {user.email}</p>
-          <p><strong>Role:</strong> {user.role}</p>
+          <p>
+            <strong>Email:</strong> {user.email}
+          </p>
+          <p>
+            <strong>Role:</strong> {user.role}
+          </p>
         </div>
         <form className="auth-form" onSubmit={handleSubmit}>
           <input

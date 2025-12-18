@@ -28,7 +28,9 @@ export function Admin() {
           <ul className="admin-menu">
             <li>
               <button
-                className={`admin-menu-link ${activeTab === "sales" ? "active" : ""}`}
+                className={`admin-menu-link ${
+                  activeTab === "sales" ? "active" : ""
+                }`}
                 onClick={() => setActiveTab("sales")}
               >
                 📈 Penjualan
@@ -36,7 +38,9 @@ export function Admin() {
             </li>
             <li>
               <button
-                className={`admin-menu-link ${activeTab === "users" ? "active" : ""}`}
+                className={`admin-menu-link ${
+                  activeTab === "users" ? "active" : ""
+                }`}
                 onClick={() => setActiveTab("users")}
               >
                 👥 Users
@@ -44,7 +48,9 @@ export function Admin() {
             </li>
             <li>
               <button
-                className={`admin-menu-link ${activeTab === "products" ? "active" : ""}`}
+                className={`admin-menu-link ${
+                  activeTab === "products" ? "active" : ""
+                }`}
                 onClick={() => setActiveTab("products")}
               >
                 📦 Produk
@@ -52,7 +58,9 @@ export function Admin() {
             </li>
             <li>
               <button
-                className={`admin-menu-link ${activeTab === "reports" ? "active" : ""}`}
+                className={`admin-menu-link ${
+                  activeTab === "reports" ? "active" : ""
+                }`}
                 onClick={() => setActiveTab("reports")}
               >
                 📋 Laporan

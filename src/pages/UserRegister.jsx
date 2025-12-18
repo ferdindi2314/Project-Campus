@@ -19,11 +19,11 @@ export function UserRegister() {
       setMessage("Password tidak sama");
       return;
     }
-    const result = register({ name, email, password });
+    const result = register({ name, email, password }, { autoLogin: false });
     if (result.success) {
       setSuccess(true);
-      setMessage("Registrasi berhasil, mengarahkan...");
-      setTimeout(() => navigate("/profile", { replace: true }), 800);
+      setMessage("Registrasi berhasil, silakan login.");
+      setTimeout(() => navigate("/login", { replace: true }), 800);
     } else {
       setSuccess(false);
       setMessage(result.message || "Registrasi gagal");

@@ -1,12 +1,13 @@
 import { useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
-import { products } from "../data/products";
+import { useProducts } from "../context/ProductsContext";
 import { useCart } from "../context/CartContext";
 import "./ProductDetail.css";
 
 export const ProductDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { products } = useProducts();
   const { addToCart } = useCart();
   const [quantity, setQuantity] = useState(1);
   const [addedToCart, setAddedToCart] = useState(false);

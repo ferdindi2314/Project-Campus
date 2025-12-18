@@ -1,29 +1,32 @@
 import { useMemo } from "react";
+import { useOrders } from "../context/OrdersContext";
 
 export function AdminReports() {
+  const { orders } = useOrders();
   const stats = useMemo(() => {
-    // Data simulasi dari localStorage atau hardcode
-    const savedOrders = localStorage.getItem("orders");
-    const orders = savedOrders ? JSON.parse(savedOrders) : [];
-
-    const totalRevenue = orders.reduce((sum, order) => sum + order.total, 0);
+    const totalRevenue = orders.reduce(
+      (sum, order) => sum + (order.total || 0),
+      0
+    );
     const averageOrder = orders.length > 0 ? totalRevenue / orders.length : 0;
-    const monthlyData = {
-      January: 5200000,
-      February: 4800000,
-      March: 6100000,
-      April: 5500000,
-      May: 7200000,
-      June: 6800000,
-    };
 
-    const categoryData = {
-      Laptop: 12,
-      Desktop: 8,
-      Monitor: 15,
-      Keyboard: 20,
-      Mouse: 18,
-    };
+    // Hitung penjualan per bulan dari order.date
+    const monthlyData = orders.reduce((acc, order) => {
+      const d = new Date(order.date);
+      const month = d.toLocaleString("id-ID", { month: "long" });
+      acc[month] = (acc[month] || 0) + (order.total || 0);
+      return acc;
+    }, {});
+
+    // Hitung per kategori dari items
+    const categoryData = orders.reduce((acc, order) => {
+      if (Array.isArray(order.items)) {
+        order.items.forEach((it) => {
+          acc[it.category] = (acc[it.category] || 0) + (it.qty || 1);
+        });
+      }
+      return acc;
+    }, {});
 
     return {
       totalRevenue,
@@ -32,7 +35,7 @@ export function AdminReports() {
       categoryData,
       totalOrders: orders.length,
     };
-  }, []);
+  }, [orders]);
 
   return (
     <div>
@@ -80,10 +83,14 @@ export function AdminReports() {
                   <td>
                     <div
                       style={{
-                        background: "linear-gradient(90deg, #667eea 0%, #764ba2 100%)",
+                        background:
+                          "linear-gradient(90deg, #667eea 0%, #764ba2 100%)",
                         height: "30px",
                         borderRadius: "4px",
-                        width: `${(value / 7200000) * 300}px`,
+                        width: `${
+                          Math.min(1, value / Math.max(1, stats.totalRevenue)) *
+                          300
+                        }px`,
                         minWidth: "5px",
                       }}
                     />
@@ -114,10 +121,11 @@ export function AdminReports() {
                   <td>
                     <div
                       style={{
-                        background: "linear-gradient(90deg, #17a2b8 0%, #138496 100%)",
+                        background:
+                          "linear-gradient(90deg, #17a2b8 0%, #138496 100%)",
                         height: "30px",
                         borderRadius: "4px",
-                        width: `${(count / 20) * 300}px`,
+                        width: `${Math.min(1, count / 20) * 300}px`,
                         minWidth: "5px",
                       }}
                     />

@@ -105,6 +105,15 @@ export const Navbar = () => {
                   >
                     Profil
                   </button>
+                  <button
+                    className="dropdown-btn login-btn"
+                    onClick={() => {
+                      setIsAccountOpen(false);
+                      navigate("/orders");
+                    }}
+                  >
+                    Pesanan Saya
+                  </button>
                   {user.role === "admin" && (
                     <button
                       className="dropdown-btn login-btn"

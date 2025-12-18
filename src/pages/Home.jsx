@@ -1,10 +1,11 @@
 import { useState } from "react";
 import "./Home.css";
 import { Link } from "react-router-dom";
-import { products } from "../data/products";
+import { useProducts } from "../context/ProductsContext";
 
 export const Home = () => {
   const [showBanner] = useState(true);
+  const { products } = useProducts();
 
   return (
     <div className="home">
